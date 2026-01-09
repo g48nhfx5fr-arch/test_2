@@ -1,320 +1,501 @@
- <!DOCTYPE html>
- <html lang="ru">
-   <head>
-     <meta charset="UTF-8" />
-     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
--    <title>Тестовая страница</title>
-+    <title>Проверка номера телефона</title>
-     <style>
--      /* Основные настройки страницы */
-+      * {
-+        box-sizing: border-box;
-+      }
-+
-       body {
-         margin: 0;
--        font-family: Arial, Helvetica, sans-serif;
--        background-color: #f5f5f5;
--        color: #333;
-+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-+        background: #f4f6fb;
-+        color: #1f2a44;
-         min-height: 100vh;
-         display: flex;
-         align-items: center;
-         justify-content: center;
-+        padding: 24px;
-       }
- 
--      /* Контейнер для контента */
-       .container {
--        text-align: center;
-+        width: min(520px, 100%);
-+        background: #ffffff;
-+        border-radius: 16px;
-         padding: 32px;
--        background-color: #ffffff;
--        border-radius: 12px;
--        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
--        max-width: 480px;
--        width: 90%;
-+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.1);
-+        display: flex;
-+        flex-direction: column;
-+        gap: 16px;
-       }
- 
--      /* Заголовок */
-       h1 {
--        margin: 0 0 16px;
-+        margin: 0;
-         font-size: 28px;
-       }
- 
--      /* Описание */
-       p {
--        margin: 0 0 24px;
-+        margin: 0;
-         line-height: 1.6;
-+        color: #4a5568;
-+      }
-+
-+      label {
-+        font-weight: 600;
-+      }
-+
-+      .input-wrap {
-+        display: flex;
-+        flex-direction: column;
-+        gap: 8px;
-+      }
-+
-+      input[type="tel"] {
-+        padding: 14px 16px;
-+        font-size: 18px;
-+        border-radius: 10px;
-+        border: 2px solid #d8dee9;
-+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
-+      }
-+
-+      input[type="tel"]:focus {
-+        outline: none;
-+        border-color: #4c7cf4;
-+        box-shadow: 0 0 0 4px rgba(76, 124, 244, 0.2);
-+      }
-+
-+      input[type="tel"].is-invalid {
-+        border-color: #e53e3e;
-+        box-shadow: 0 0 0 4px rgba(229, 62, 62, 0.15);
-+      }
-+
-+      input[type="tel"].is-valid {
-+        border-color: #38a169;
-+        box-shadow: 0 0 0 4px rgba(56, 161, 105, 0.15);
-+      }
-+
-+      .hint {
-+        font-size: 14px;
-+        color: #718096;
-+      }
-+
-+      .error {
-+        color: #e53e3e;
-+        font-size: 14px;
-+        display: none;
-+      }
-+
-+      .error.is-visible {
-+        display: block;
-       }
- 
--      /* Кнопка */
-       .action-button {
--        background-color: #4a90e2;
-+        align-self: flex-start;
-+        background: #4c7cf4;
-         color: #ffffff;
-         border: none;
--        padding: 12px 24px;
-+        padding: 12px 22px;
-         font-size: 16px;
--        border-radius: 6px;
-+        border-radius: 10px;
-         cursor: pointer;
--        transition: background-color 0.2s ease, transform 0.2s ease;
-+        transition: background 0.2s ease, transform 0.2s ease;
-       }
- 
--      /* Эффект наведения */
--      .action-button:hover {
--        background-color: #357abf;
-+      .action-button:disabled {
-+        cursor: wait;
-+        opacity: 0.75;
-+      }
-+
-+      .action-button:hover:not(:disabled) {
-+        background: #3b63c8;
-         transform: translateY(-1px);
-       }
-+
-+      .result {
-+        background: #f8fafc;
-+        border-radius: 12px;
-+        padding: 16px;
-+        border: 1px solid #e2e8f0;
-+        display: none;
-+      }
-+
-+      .result.is-visible {
-+        display: block;
-+      }
-+
-+      .result strong {
-+        display: block;
-+        margin-bottom: 6px;
-+      }
-+
-+      .footer-note {
-+        font-size: 12px;
-+        color: #94a3b8;
-+        text-align: center;
-+        margin-top: 8px;
-+      }
-     </style>
-   </head>
-   <body>
-     <main class="container">
--      <h1>Тестовая страница</h1>
--      <p>
--        Это простая тестовая страница с минималистичным дизайном, кнопкой и
--        интерактивным поведением.
--      </p>
--      <button class="action-button" type="button">Нажми меня</button>
-+      <h1>Проверка номера телефона</h1>
-+      <p>Введите номер телефона в формате РФ, чтобы выполнить проверку.</p>
-+
-+      <div class="input-wrap">
-+        <label for="phone-input">Номер телефона</label>
-+        <input
-+          id="phone-input"
-+          type="tel"
-+          placeholder="+7 (___) ___-__-__"
-+          inputmode="tel"
-+          autocomplete="tel"
-+        />
-+        <span class="hint">Формат: +7 (999) 123-45-67</span>
-+        <span id="error-message" class="error">
-+          Введите корректный номер РФ: +7 (999) 123-45-67
-+        </span>
-+      </div>
-+
-+      <button class="action-button" type="button" id="submit-button">
-+        Отправить
-+      </button>
-+
-+      <div class="result" id="result-block">
-+        <strong id="result-title"></strong>
-+        <div id="result-details"></div>
-+      </div>
-+
-+      <div class="footer-note">
-+        Статическая страница, подходит для GitHub Pages.
-+      </div>
-     </main>
- 
-     <script>
--      // Добавляем обработчик для кнопки
--      const button = document.querySelector(".action-button");
-+      const phoneInput = document.getElementById("phone-input");
-+      const submitButton = document.getElementById("submit-button");
-+      const resultBlock = document.getElementById("result-block");
-+      const resultTitle = document.getElementById("result-title");
-+      const resultDetails = document.getElementById("result-details");
-+      const errorMessage = document.getElementById("error-message");
-+
-+      const MAX_DIGITS = 11;
-+
-+      const getDigits = (value) => value.replace(/\D/g, "");
-+
-+      // Нормализация ввода под РФ и E.164
-+      const normalizePhone = (value) => {
-+        let digits = getDigits(value);
-+
-+        if (!digits) {
-+          return { digits: "", e164: "" };
-+        }
-+
-+        if (digits.startsWith("8")) {
-+          digits = `7${digits.slice(1)}`;
-+        } else if (digits.startsWith("7")) {
-+          digits = `7${digits.slice(1)}`;
-+        } else if (digits.length === 10) {
-+          digits = `7${digits}`;
-+        }
-+
-+        digits = digits.slice(0, MAX_DIGITS);
-+        const e164 = digits.length === MAX_DIGITS && digits.startsWith("7")
-+          ? `+${digits}`
-+          : "";
-+
-+        return { digits, e164 };
-+      };
-+
-+      // Маска ввода: +7 (999) 123-45-67
-+      const formatPhone = (digits) => {
-+        if (!digits) return "";
-+
-+        const country = "+7";
-+        const rest = digits.startsWith("7") ? digits.slice(1) : digits;
-+        const area = rest.slice(0, 3);
-+        const first = rest.slice(3, 6);
-+        const second = rest.slice(6, 8);
-+        const third = rest.slice(8, 10);
-+
-+        let formatted = country;
-+        if (area) {
-+          formatted += ` (${area}`;
-+        }
-+        if (area.length === 3) {
-+          formatted += ")";
-+        }
-+        if (first) {
-+          formatted += ` ${first}`;
-+        }
-+        if (second) {
-+          formatted += `-${second}`;
-+        }
-+        if (third) {
-+          formatted += `-${third}`;
-+        }
-+        return formatted;
-+      };
-+
-+      const setValidityState = ({ valid }) => {
-+        phoneInput.classList.toggle("is-valid", valid);
-+        phoneInput.classList.toggle("is-invalid", !valid);
-+        errorMessage.classList.toggle("is-visible", !valid);
-+      };
-+
-+      const clearState = () => {
-+        phoneInput.classList.remove("is-valid", "is-invalid");
-+        errorMessage.classList.remove("is-visible");
-+        resultBlock.classList.remove("is-visible");
-+      };
-+
-+      phoneInput.addEventListener("input", (event) => {
-+        const { digits } = normalizePhone(event.target.value);
-+        const formatted = formatPhone(digits);
-+        event.target.value = formatted;
-+        clearState();
-+      });
-+
-+      submitButton.addEventListener("click", () => {
-+        const { digits, e164 } = normalizePhone(phoneInput.value);
-+        const isValid = e164.length === 12 && /^\+7\d{10}$/.test(e164);
-+
-+        if (!isValid) {
-+          setValidityState({ valid: false });
-+          return;
-+        }
-+
-+        setValidityState({ valid: true });
-+        resultBlock.classList.remove("is-visible");
-+        submitButton.disabled = true;
-+        const originalText = submitButton.textContent;
-+        submitButton.textContent = "Отправка...";
- 
--      button.addEventListener("click", () => {
--        alert("Кнопка работает");
-+        setTimeout(() => {
-+          submitButton.disabled = false;
-+          submitButton.textContent = originalText;
-+          resultTitle.textContent = `Номер принят: ${e164}`;
-+          resultDetails.textContent = `Форматированный вид: ${formatPhone(digits)}`;
-+          resultBlock.classList.add("is-visible");
-+        }, 700);
-       });
-     </script>
-   </body>
- </html>
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Реестр специалистов — проверка по телефону</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --text: #1f2a44;
+        --muted: #667085;
+        --primary: #4c7cf4;
+        --primary-dark: #3c64cc;
+        --success: #2f855a;
+        --success-bg: #e6f5eb;
+        --danger: #c53030;
+        --danger-bg: #fcebea;
+        --border: #e2e8f0;
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .wrapper {
+        width: min(1080px, 100%);
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-top: 16px;
+      }
+
+      .logo {
+        font-weight: 700;
+        font-size: 22px;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 32px;
+        align-items: center;
+        margin-top: 32px;
+      }
+
+      .hero h1 {
+        font-size: clamp(28px, 3vw, 40px);
+        margin: 0 0 12px;
+      }
+
+      .hero p {
+        margin: 0;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      label {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      input[type="tel"] {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 18px;
+        border-radius: 12px;
+        border: 2px solid var(--border);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      input[type="tel"]:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(76, 124, 244, 0.2);
+      }
+
+      input[type="tel"].is-invalid {
+        border-color: var(--danger);
+        box-shadow: 0 0 0 4px rgba(197, 48, 48, 0.15);
+      }
+
+      .hint {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .error {
+        font-size: 13px;
+        color: var(--danger);
+        display: none;
+      }
+
+      .error.is-visible {
+        display: block;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .action-button {
+        border: none;
+        background: var(--primary);
+        color: #fff;
+        padding: 12px 22px;
+        border-radius: 12px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .action-button:hover:not(:disabled) {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+      }
+
+      .action-button:disabled {
+        opacity: 0.7;
+        cursor: wait;
+      }
+
+      .result {
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+        opacity: 0;
+        max-height: 0;
+        padding: 0 18px;
+        transform: translateY(6px);
+        transition: all 0.25s ease;
+      }
+
+      .result.is-visible {
+        opacity: 1;
+        max-height: 240px;
+        padding: 16px 18px;
+        transform: translateY(0);
+      }
+
+      .result--loading {
+        background: #eef2ff;
+        border-color: #c7d2fe;
+        color: #3730a3;
+      }
+
+      .result--success {
+        background: var(--success-bg);
+        border-color: #9ae6b4;
+        color: var(--success);
+      }
+
+      .result--error {
+        background: var(--danger-bg);
+        border-color: #feb2b2;
+        color: var(--danger);
+      }
+
+      .result strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .trust {
+        margin-top: 32px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+      }
+
+      .trust-item {
+        background: var(--card);
+        border-radius: 14px;
+        padding: 16px;
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .trust-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: #eef2ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      footer {
+        margin-top: auto;
+        padding: 32px 0 16px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      @media (max-width: 640px) {
+        .card {
+          padding: 20px;
+        }
+
+        .actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .action-button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="wrapper">
+        <div class="logo">Реестр специалистов</div>
+        <div class="subtitle">
+          Проверка аттестованных специалистов по новостройкам — Пермь
+        </div>
+      </header>
+
+      <main class="wrapper">
+        <section class="hero">
+          <div>
+            <h1>Проверка специалиста по телефону</h1>
+            <p>
+              Введите номер телефона специалиста, чтобы узнать, есть ли он в базе
+              аттестованных.
+            </p>
+          </div>
+
+          <div class="card">
+            <form id="check-form" novalidate>
+              <div class="input-group">
+                <label for="phone-input">Номер телефона</label>
+                <input
+                  id="phone-input"
+                  type="tel"
+                  inputmode="tel"
+                  autocomplete="tel"
+                  placeholder="+7 (___) ___-__-__"
+                />
+                <span class="hint">Формат: +7 (999) 123-45-67</span>
+                <span class="error" id="phone-error">
+                  Введите корректный номер РФ
+                </span>
+              </div>
+              <div class="actions">
+                <button class="action-button" type="submit" id="submit-btn">
+                  Проверить
+                </button>
+              </div>
+            </form>
+
+            <div class="result" id="result">
+              <strong id="result-title"></strong>
+              <div id="result-body"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="trust">
+          <div class="trust-item">
+            <div class="trust-icon">✔️</div>
+            <div>
+              <strong>Официальная аттестация</strong>
+              <div class="hint">Данные подтверждены регистратором</div>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">🗂️</div>
+            <div>
+              <strong>Актуальная база</strong>
+              <div class="hint">Обновляется регулярно</div>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">⚡</div>
+            <div>
+              <strong>Проверка за секунды</strong>
+              <div class="hint">Автоматический поиск</div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div>Результат проверки носит информационный характер.</div>
+        <div>2025 · Реестр специалистов</div>
+      </footer>
+    </div>
+
+    <script>
+      const DEMO_SPECIALISTS = [
+        {
+          phoneE164: "+79123456780",
+          fullName: "Александрова Мария Викторовна",
+          attestationNumber: "ПРМ-1024",
+          city: "Пермь",
+        },
+        {
+          phoneE164: "+79031234567",
+          fullName: "Иванов Кирилл Сергеевич",
+          attestationNumber: "ПРМ-1187",
+          city: "Пермь",
+        },
+        {
+          phoneE164: "+79222446655",
+          fullName: "Петрова Ирина Андреевна",
+          attestationNumber: "ПРМ-1350",
+          city: "Пермь",
+        },
+        {
+          phoneE164: "+79127894512",
+          fullName: "Соловьев Роман Олегович",
+          attestationNumber: "ПРМ-1429",
+          city: "Пермь",
+        },
+        {
+          phoneE164: "+79021113344",
+          fullName: "Никифорова Елена Павловна",
+          attestationNumber: "ПРМ-1563",
+          city: "Пермь",
+        },
+      ];
+
+      const phoneInput = document.getElementById("phone-input");
+      const form = document.getElementById("check-form");
+      const errorEl = document.getElementById("phone-error");
+      const submitBtn = document.getElementById("submit-btn");
+      const result = document.getElementById("result");
+      const resultTitle = document.getElementById("result-title");
+      const resultBody = document.getElementById("result-body");
+
+      const getDigits = (value) => value.replace(/\D/g, "");
+
+      // Нормализация номера к виду +7XXXXXXXXXX
+      const normalizePhone = (value) => {
+        let digits = getDigits(value);
+        if (!digits) {
+          return { digits: "", e164: "" };
+        }
+
+        if (digits.startsWith("8")) {
+          digits = `7${digits.slice(1)}`;
+        } else if (digits.startsWith("7")) {
+          digits = `7${digits.slice(1)}`;
+        } else if (digits.length === 10) {
+          digits = `7${digits}`;
+        }
+
+        digits = digits.slice(0, 11);
+        const e164 = digits.length === 11 ? `+${digits}` : "";
+        return { digits, e164 };
+      };
+
+      // Маска ввода +7 (999) 123-45-67
+      const formatPhone = (digits) => {
+        if (!digits) return "";
+        const normalized = digits.startsWith("7") ? digits.slice(1) : digits;
+        const part1 = normalized.slice(0, 3);
+        const part2 = normalized.slice(3, 6);
+        const part3 = normalized.slice(6, 8);
+        const part4 = normalized.slice(8, 10);
+
+        let formatted = "+7";
+        if (part1) {
+          formatted += ` (${part1}`;
+        }
+        if (part1.length === 3) {
+          formatted += ")";
+        }
+        if (part2) {
+          formatted += ` ${part2}`;
+        }
+        if (part3) {
+          formatted += `-${part3}`;
+        }
+        if (part4) {
+          formatted += `-${part4}`;
+        }
+        return formatted;
+      };
+
+      const setErrorState = (isInvalid) => {
+        phoneInput.classList.toggle("is-invalid", isInvalid);
+        errorEl.classList.toggle("is-visible", isInvalid);
+      };
+
+      const setResultState = (type, title, body) => {
+        result.className = `result is-visible result--${type}`;
+        resultTitle.textContent = title;
+        resultBody.innerHTML = body;
+      };
+
+      const resetResult = () => {
+        result.className = "result";
+        resultTitle.textContent = "";
+        resultBody.textContent = "";
+      };
+
+      phoneInput.addEventListener("input", (event) => {
+        const { digits } = normalizePhone(event.target.value);
+        event.target.value = formatPhone(digits);
+        setErrorState(false);
+        resetResult();
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const { e164 } = normalizePhone(phoneInput.value);
+        const isValid = /^\+7\d{10}$/.test(e164);
+
+        if (!isValid) {
+          setErrorState(true);
+          resetResult();
+          return;
+        }
+
+        setErrorState(false);
+        submitBtn.disabled = true;
+        setResultState("loading", "Проверяем…", "Пожалуйста, подождите");
+
+        const delay = 600 + Math.floor(Math.random() * 300);
+        window.setTimeout(() => {
+          const specialist = DEMO_SPECIALISTS.find(
+            (item) => item.phoneE164 === e164
+          );
+
+          if (specialist) {
+            setResultState(
+              "success",
+              "Специалист найден в базе",
+              `<div><strong>${specialist.fullName}</strong></div>
+               <div>Номер аттестации: ${specialist.attestationNumber}</div>
+               <div>Город: ${specialist.city}</div>`
+            );
+          } else {
+            setResultState(
+              "error",
+              "Специалист не найден в базе аттестованных",
+              "Проверьте номер или уточните данные у специалиста."
+            );
+          }
+
+          submitBtn.disabled = false;
+        }, delay);
+      });
+    </script>
+  </body>
+</html>
